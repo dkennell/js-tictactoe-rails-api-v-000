@@ -242,6 +242,7 @@ describe('#integration tests of persistence', function() {
     jasmine.Ajax.withMock(function() {
       $('#previous').click()
       var request = jasmine.Ajax.requests.mostRecent();
+      debugger;
       expect(request.url).toBe('/games');
       expect(request.method).toBe('GET');
     });

@@ -27,7 +27,13 @@ function saveGame() {
 }
 
 function previousGame() {
-  debugger;
+  $.get("/games", function(response){
+    $("#games").html("")
+    $("#games").html("<ul></ul>")
+    Array.prototype.forEach.call(response.games, function(game){
+    $("#games ul").append("<li>" + game.id + "</li>")
+    })
+  })
 }
 
 // Turn functionality
