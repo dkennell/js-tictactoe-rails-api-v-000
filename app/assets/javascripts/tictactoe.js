@@ -22,7 +22,6 @@ function saveGame() {
   Array.prototype.forEach.call(board, function(cell){
       game_state.push(cell.innerHTML)  
    })
-
   $.post("/games", {state: JSON.stringify(game_state)});
 }
 
@@ -31,12 +30,21 @@ function previousGame() {
     $("#games").html("")
     $("#games").html("<ul></ul>")
     Array.prototype.forEach.call(response.games, function(game){
-    $("#games ul").append("<li>" + game.id + "</li>")
+    $("#games ul").append(`<li onclick="loadGame(${game.id})">` + game.id + `</li>`)
     })
   })
 }
 
-// Turn functionality
+function loadGame(game_id){
+  // gets an individual game from the show action
+  $.get('/games/' + game_id, function(response){
+    window.savedGame = response
+  })
+  // changes the board to fit the state of the loaded game
+  for (i = 0; i < board.length; i++){
+    board[i].innerHTML = savedGame['game'].state[i]
+  }
+}
 
 function doTurn() {
   updateState();
@@ -61,7 +69,6 @@ function player() {
 }
 
 // Check if there is a winner, a tie, or play should continue.
-
 function checkWinner() {
   if (checkTie() === true) {
     message("Tie game")
@@ -104,14 +111,7 @@ function message(winner) {
   })
 }
 
-/////////THIS IS NEW:
-  
-  function currentGame(){
-
-  }
-
-  // Document ready
-
+// Document ready
 $(function() {
   attachListeners();
   attachButtonListeners();
